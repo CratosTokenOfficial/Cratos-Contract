@@ -153,7 +153,7 @@ constructor() public {
 name = "Cratos BEP20";
 symbol = "CRTS";
 decimals = 18;
-totalSupply_ = 36e27;
+totalSupply_ = 36e26;
 balances[owner] = totalSupply_;
 emit Transfer(address(0), owner, totalSupply_);
 }

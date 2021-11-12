@@ -1,5 +1,3 @@
-# Cratos-Contract
-
 # Cratos_Token 
 현재 유통되는 토큰 코드이며, 
 코드로 동결, 소각 및 토큰 오너 변경 기능이 있습니다. 

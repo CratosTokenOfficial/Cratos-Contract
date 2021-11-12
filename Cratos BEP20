@@ -116,10 +116,10 @@ owner = newOwner;
 }
 
 /*
-    ERC20 Token interface
+    BEP20 Token interface
 */
 
-contract ERC20 {
+contract BEP20 {
 
 function totalSupply() public view returns (uint256);
 function balanceOf(address who) public view returns (uint256);
@@ -136,7 +136,7 @@ interface TokenRecipient {
 function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData) external;
 }
 
-contract Cratos_Token is ERC20, Ownable {
+contract Cratos_BEP20 is BEP20, Ownable {
 using SafeMath for uint256;
 
 string public name;
@@ -144,16 +144,16 @@ string public symbol;
 uint8 public decimals;
 uint256 internal totalSupply_;
 mapping(address => uint256) internal balances;
-mapping(address => bool) public frozen;
 mapping(address => mapping(address => uint256)) internal allowed;
 
 event Mint(address indexed owner, uint256 value);
+event Burn(address indexed owner, uint256 value);
 
 constructor() public {
 name = "Cratos BEP20";
 symbol = "CRTS";
 decimals = 18;
-totalSupply_ = 0;
+totalSupply_ = 36e27;
 balances[owner] = totalSupply_;
 emit Transfer(address(0), owner, totalSupply_);
 }
@@ -258,7 +258,6 @@ return allowed[_holder][_spender];
 
 }
 
-
 /**
   * Token Mint.
  */
@@ -270,6 +269,21 @@ address minter = msg.sender;
 balances[minter] = balances[minter].add(_value);
 totalSupply_ = totalSupply_.add(_value);
 emit Mint(minter, _value);
+
+return true;
+}
+
+/**
+  * Token Burn.
+ */
+
+function burn(uint256 _value) public onlyOwner returns (bool) {
+    
+require(_value <= balances[msg.sender]);
+address burner = msg.sender;
+balances[burner] = balances[burner].sub(_value);
+totalSupply_ = totalSupply_.sub(_value);
+emit Burn(burner, _value);
 
 return true;
 }
